@@ -118,7 +118,7 @@ async def add_organzation(sor, dappid, org):
 async def add_user(sor, user):
 	id = getID()
 	user['id'] = id
-	await create_user(sor, user, roles=user['roles']
+	await create_user(sor, user, roles=user.get('roles'))
 	return id
 	
 async def add_apikey(sor, dappid, dorgid, duserid, orgid, userid):
@@ -181,3 +181,5 @@ async def sync_user(request, params_kw, *args, **kw):
 		return return_success(ret_users)
 	return return_error(-9)
 
+if __name__ == '__main__':
+	print('ggg')
