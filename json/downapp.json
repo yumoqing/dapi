@@ -1,0 +1,23 @@
+{
+    "tblname": "downapp",
+    "title":"下位系统",
+    "params": {
+        "sortby":"id",
+        "confidential_fields":["secretkey"],
+        "browserfields": {
+            "exclouded": ["id", "secretkey" ],
+            "alters": {}
+        },
+        "editexclouded": [
+            
+        ],
+        "subtables": [
+            {
+                "field":"appid",
+                "title":"apikey",
+                "subtable":"downapikey"
+            }
+        ]
+    }
+}
+
