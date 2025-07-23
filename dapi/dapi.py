@@ -33,23 +33,23 @@ async def get_secretkey(sor, appid):
 async def get_apikey_user(sor, apikey):
 	f = get_serverenv('password_encode')
 	apikey = f(apikey)
-    sql = """select u.* from downapikey a, users u 
+	sql = """select u.* from downapikey a, users u 
 where a.userid = b.id 
 	and apikey=${apikey}$ 
 	and expired_date > ${today}$"""
 
-    recs = await sor.sqlExe(sql, {"apikey":apikey, 'today': curDateString()})
-    if len(recs) < 1:
-        return None
-    return recs[0]
+	recs = await sor.sqlExe(sql, {"apikey":apikey, 'today': curDateString()})
+	if len(recs) < 1:
+		return None
+	return recs[0]
 
 async def bearer_auth(auth):
 	if not auth.startswith('Bearer '):
 		return None
-    apikey = auth[7:]
+	apikey = auth[7:]
 
-    if apikey is None:
-        return None
+	if apikey is None:
+		return None
 	db = DBPools()
 	dbname = get_dbname()
 	async with db.sqlorContext(dbname) as sor:
