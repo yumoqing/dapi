@@ -1,5 +1,5 @@
 {
-    "tblname": "apikey",
+    "tblname": "downapikey",
     "title":"用户",
     "params": {
         "sortby":"name",

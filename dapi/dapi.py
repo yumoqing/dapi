@@ -1,14 +1,14 @@
 from traceback import format_exc
 from appPublic.log import debug, exception, info
 from appPublic.timeUtils import curDateString
-from uniqueID import getID
+from appPublic.aes import aes_encrypt_ecb, aes_decrypt_ecb
+from appPublic.uniqueID import getID
 from time import time
 from ahserver.serverenv import ServerEnv
 from ahserver.auth_api import get_session_userinfo, user_login
 from sqlor.dbpools import DBPools
-form rbac.check_perm improt create_org, create_user
+from rbac.check_perm improt create_org, create_user
 
-from appPublic.aes import aes_encrypt_ecb, aes_decrypt_ecb
 
 return_messages = {
 	-9: '用户同步：未知未知错误',
