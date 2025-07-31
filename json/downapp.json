@@ -62,6 +62,7 @@
 					"url":"{{entire_url('/dapi/copy_apikey.ui')}}"
 				}
 			}
+		]
     }
 }
 
