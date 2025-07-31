@@ -4,6 +4,7 @@
     "params": {
         "sortby":"id",
         "confidential_fields":["secretkey"],
+		"noedit":true,
         "browserfields": {
             "exclouded": ["id", "secretkey" ],
             "alters": {}
@@ -17,7 +18,50 @@
                 "title":"apikey",
                 "subtable":"downapikey"
             }
-        ]
+        ],
+		"toolbar":{
+			"tools":[
+				{
+					"name":"create_apikey",
+					"label":"创建apikey",
+					"icon":"{{entire_url('/imgs/newkey.svg')}}"
+				},
+				{
+					"name":"copy_apikey",
+					"label":"复制apikey",
+					"icon":"{{entire_url('/imgs/copy.svg')}}"
+				}
+			]
+		},
+		"binds":[
+			{
+				"wid":"self",
+				"event":"create_apikey",
+				"actiontype":"urlwidget",
+				"target":"PopupWindow",
+				"popup_options":{
+					"width":"50%",
+					"height":"50%",
+					"archor":"cr"
+				},
+				"options":{
+					"url":"{{entire_url('/dapi/create_apikey.ui')}}"
+				}
+			},
+			{
+				"wid":"self",
+				"event":"copy_apikey",
+				"actiontype":"urlwidget",
+				"target":"PopupWindow",
+				"popup_options":{
+					"width":"50%",
+					"height":"50%",
+					"archor":"cr"
+				},
+				"options":{
+					"url":"{{entire_url('/dapi/copy_apikey.ui')}}"
+				}
+			}
     }
 }
 

@@ -1,0 +1,23 @@
+debug(f'{params_kw=}')
+dbname = get_module_dbname()
+db = DBPools()
+async with db.sqlorContext(dbname) as sor:
+	orgid = await get_userorgid()
+	userid = await get_user()
+	ns = {
+		"id": params_kw.id,
+		"orgid":orgid,
+		"userid":"userid
+	}
+	sql = """select a.*,
+b.apikey
+from downapp a, downapikey b
+where a.id = b.dappid
+	and a.id = ${id}$
+	and a.orgid = ${orgid}$
+	and b.userid = ${userid}$"""
+	recs = await sor.sqlExe(sql, ns)
+	if len(recs):
+		r = recs[0]
+		return UiMessage(title="copy apikey", message=f'appid={r.id}, apikey={r.apikey} secretkey={r.secretkey}')
+return UiError(title='copy apikey', message='copy apikey error')
