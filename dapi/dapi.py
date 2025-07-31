@@ -50,8 +50,8 @@ where a.userid = b.id
 		return None
 	return recs[0]
 
-async def bearer_auth(request):
-	auth = request.headers.get('Authorization')
+async def bearer_auth(sor, request):
+	auth = request.headers.get('Authentication')
 	if auth is None:
 		return None
 	if not auth.startswith('Bearer '):
@@ -60,16 +60,12 @@ async def bearer_auth(request):
 	client_ip = request['client_ip']
 	if apikey is None:
 		return None
-	db = DBPools()
-	dbname = get_dbname()
-	async with db.sqlorContext(dbname) as sor:
-		user = await get_apikey_user(sor, apikey, client_ip)
-		await user_login(user.id, username=user.username, userorgid=user.orgid)
-		return user.id
-	return None
+	user = await get_apikey_user(sor, apikey, client_ip)
+	await user_login(user.id, username=user.username, userorgid=user.orgid)
+	return user.id
 
-async def deerer_auth(request):
-	auth = request.headers.get('Authorization')
+async def deerer_auth(sor, request):
+	auth = request.headers.get('Authentication')
 	if auth is None:
 		return None
 	if not auth.startswith('Deerer '):
@@ -77,17 +73,12 @@ async def deerer_auth(request):
 	client_ip = request['client_ip']
 	deer_data = auth[7:]
 	appid, cyber = bear_data.split('-:-')
-	db = DBPools()
-	dbname = get_dbname()
-	async with db.sqlorContext(dbname) as sor:
-		secretkey = await get_secretkey(sor, appid)
-		txt = aes_decrypt_ecb(secretkey, cyber)
-		t, apikey = txt.split(':')
-		user = await get_apikey_user(sor, apikey, client_ip)
-		await user_login(user.id, username=user.username, userorgid=user.orgid)
-		return user.id
-	
-	return None
+	secretkey = await get_secretkey(sor, appid)
+	txt = aes_decrypt_ecb(secretkey, cyber)
+	t, apikey = txt.split(':')
+	user = await get_apikey_user(sor, apikey, client_ip)
+	await user_login(user.id, username=user.username, userorgid=user.orgid)
+	return user.id
 			
 def return_error(code):
 	return {

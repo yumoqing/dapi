@@ -5,6 +5,6 @@ from rbac.check_perm import register_auth_method
 def load_dapi():
 	env = ServerEnv()
 	env.sync_user = sync_user
-	register_auth_method('Bearer', bearer_auth)
-	register_auth_method('Deerer', deerer_auth)
+	register_auth_method('Bearer ', bearer_auth)
+	register_auth_method('Deerer ', deerer_auth)
 
