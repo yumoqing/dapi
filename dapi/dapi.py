@@ -30,37 +30,51 @@ async def get_secretkey(sor, appid):
 	f = get_serverenv('password_decode')
 	return f(secret_key).encode('utf-8')
 
-async def get_apikey_user(sor, apikey):
+async def get_apikey_user(sor, apikey, client_ip):
 	f = get_serverenv('password_encode')
 	apikey = f(apikey)
-	sql = """select u.* from downapikey a, users u 
+	sql = """select u.*, b.allowedips from downapikey a, users u, downapp b
 where a.userid = b.id 
+	and b.id = a.dappid
 	and apikey=${apikey}$ 
 	and expired_date > ${today}$"""
 
 	recs = await sor.sqlExe(sql, {"apikey":apikey, 'today': curDateString()})
 	if len(recs) < 1:
+		debug(f'{apikey=} not registered')
+		return None
+	ips = rec[i].allowedips.split(',')
+	ips = [ ip.strip() for ip in ips ]
+	if client_ip not in ips:
+		debug(f' {client_ip} not in {ips=}')
 		return None
 	return recs[0]
 
-async def bearer_auth(auth):
+async def bearer_auth(request):
+	auth = request.headers.get('Authorization')
+	if auth is None:
+		return None
 	if not auth.startswith('Bearer '):
 		return None
 	apikey = auth[7:]
-
+	client_ip = request['client_ip']
 	if apikey is None:
 		return None
 	db = DBPools()
 	dbname = get_dbname()
 	async with db.sqlorContext(dbname) as sor:
-		user = await get_apikey_user(sor, apikey)
+		user = await get_apikey_user(sor, apikey, client_ip)
 		await user_login(user.id, username=user.username, userorgid=user.orgid)
 		return user.id
 	return None
 
-async def deerer_auth(auth):
+async def deerer_auth(request):
+	auth = request.headers.get('Authorization')
+	if auth is None:
+		return None
 	if not auth.startswith('Deerer '):
 		return None
+	client_ip = request['client_ip']
 	deer_data = auth[7:]
 	appid, cyber = bear_data.split('-:-')
 	db = DBPools()
@@ -69,7 +83,7 @@ async def deerer_auth(auth):
 		secretkey = await get_secretkey(sor, appid)
 		txt = aes_decrypt_ecb(secretkey, cyber)
 		t, apikey = txt.split(':')
-		user = await get_apikey_user(apikey)
+		user = await get_apikey_user(sor, apikey, client_ip)
 		await user_login(user.id, username=user.username, userorgid=user.orgid)
 		return user.id
 	
