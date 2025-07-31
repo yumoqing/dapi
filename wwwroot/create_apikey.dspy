@@ -1,0 +1,24 @@
+debug(f'{params_kw=}')
+dbname = get_module_dbname()
+db = DBPools()
+async with db.sqlorContext(dbname) as sor:
+	orgid = await get_userorgid()
+	userid = await get_user()
+	ns = {
+		"id": uuid(),
+		"name": params_kw.name,
+		"description": params_kw.description,
+		"secretkey": uuid(),
+		"allowedips": params_kw.allowips,
+		"orgid": orgid
+	}
+	await sor.C('downapp', ns)
+	ns1 = {
+		"id": uuid()
+		"dappid": ns['id'],
+		"userid": userid,
+		"apikey": uuid(),
+		"enabled_date": curDateString(),
+		"expired_date": '9999-12-31'
+	}
+	await sor.C('downapikey', ns1)
