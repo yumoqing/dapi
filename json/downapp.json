@@ -52,7 +52,7 @@
 					"archor":"cr"
 				},
 				"options":{
-					"url":"{{entire_url('/dapi/copy_apikey.ui')}}"
+					"url":"{{entire_url('/dapi/copy_apikey.dspy')}}"
 				}
 			}
 		]
