@@ -7,7 +7,7 @@ async with db.sqlorContext(dbname) as sor:
 	ns = {
 		"id": params_kw.id,
 		"orgid":orgid,
-		"userid":"userid
+		"userid":userid
 	}
 	sql = """select a.*,
 b.apikey
@@ -19,5 +19,42 @@ where a.id = b.dappid
 	recs = await sor.sqlExe(sql, ns)
 	if len(recs):
 		r = recs[0]
-		return UiMessage(title="copy apikey", message=f"appid={r.id}, apikey={r.apikey} secretkey={r.secretkey}")
-return UiError(title='copy apikey', message='copy apikey error')
+		return {
+			"widgettype":"VBox",
+			"options":{
+				"height":"100%",
+				"width":"100%"
+			},
+			"subwidgets":[
+				{
+					"widgettype":"Text",
+					"options":{
+						"wrap":True,
+						"halign":"left",
+						"text":f"appid={r.dappid}"
+					}
+				},
+				{
+					"widgettype":"Text",
+					"options":{
+						"wrap":True,
+						"halign":"left",
+						"text":f"apikey={r.apikey}"
+					}
+				},
+				{
+					"widgettype":"Text",
+					"options":{
+						"wrap":True,
+						"halign":"left",
+						"text":f"secretkey={r.secretkey}"
+					}
+				}
+			]
+		}
+return {
+	"widgettype":"Text",
+	"options":{
+		"text":'copy apikey error'
+	}
+}
