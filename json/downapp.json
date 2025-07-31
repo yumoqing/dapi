@@ -6,18 +6,11 @@
         "confidential_fields":["secretkey"],
 		"noedit":true,
         "browserfields": {
-            "exclouded": ["id", "secretkey" ],
+            "exclouded": ["id", "secretkey", "orgid" ],
             "alters": {}
         },
         "editexclouded": [
             
-        ],
-        "subtables": [
-            {
-                "field":"appid",
-                "title":"apikey",
-                "subtable":"downapikey"
-            }
         ],
 		"toolbar":{
 			"tools":[

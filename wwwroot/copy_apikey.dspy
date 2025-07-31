@@ -1,5 +1,5 @@
 debug(f'{params_kw=}')
-dbname = get_module_dbname()
+dbname = get_module_dbname('dapi')
 db = DBPools()
 async with db.sqlorContext(dbname) as sor:
 	orgid = await get_userorgid()
@@ -19,5 +19,5 @@ where a.id = b.dappid
 	recs = await sor.sqlExe(sql, ns)
 	if len(recs):
 		r = recs[0]
-		return UiMessage(title="copy apikey", message=f'appid={r.id}, apikey={r.apikey} secretkey={r.secretkey}')
+		return UiMessage(title="copy apikey", message=f"appid={r.id}, apikey={r.apikey} secretkey={r.secretkey}")
 return UiError(title='copy apikey', message='copy apikey error')
