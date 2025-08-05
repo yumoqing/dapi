@@ -5,11 +5,11 @@
         "sortby":"id",
         "confidential_fields":["secretkey"],
         "browserfields": {
-            "exclouded": ["id", "secretkey", "orgid" ],
+            "exclouded": ["secretkey", "orgid" ],
             "alters": {}
         },
         "editexclouded": [
-            "id", "secretkey", "orgid"
+            "secretkey", "orgid"
         ],
 		"toolbar":{
 			"tools":[
