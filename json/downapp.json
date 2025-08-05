@@ -4,20 +4,12 @@
     "params": {
         "sortby":"id",
         "confidential_fields":["secretkey"],
-		"noedit":true,
         "browserfields": {
-            "exclouded": ["id", "secretkey" ],
+            "exclouded": ["id", "secretkey", "orgid" ],
             "alters": {}
         },
         "editexclouded": [
-            
-        ],
-        "subtables": [
-            {
-                "field":"appid",
-                "title":"apikey",
-                "subtable":"downapikey"
-            }
+            "id", "secretkey", "orgid"
         ],
 		"toolbar":{
 			"tools":[
@@ -29,6 +21,7 @@
 				{
 					"name":"copy_apikey",
 					"label":"复制apikey",
+					"selected_row":true,
 					"icon":"{{entire_url('/imgs/copy.svg')}}"
 				}
 			]
@@ -59,9 +52,10 @@
 					"archor":"cr"
 				},
 				"options":{
-					"url":"{{entire_url('/dapi/copy_apikey.ui')}}"
+					"url":"{{entire_url('/dapi/copy_apikey.dspy')}}"
 				}
 			}
+		]
     }
 }
 
