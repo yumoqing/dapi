@@ -4,13 +4,13 @@
     "params": {
         "sortby":"name",
         "confidential_fields":["apikey"],
-        "logined_userorgid":"orgid",
+        "logined_userid":"userid",
         "browserfields": {
-            "exclouded": ["id", "apikey", "orgid", "userid" ],
+            "exclouded": ["id", "apikey", "userid" ],
             "alters": {}
         },
         "editexclouded": [
-            "id", "apikey", "orgid", "userid"
+            "id", "apikey", "userid"
         ]
     }
 }

@@ -28,7 +28,7 @@ async def get_secretkey(sor, appid):
 		return None
 	secretkey = recs[0].secretkey
 	f = get_serverenv('password_decode')
-	return f(secret_key).encode('utf-8')
+	return f(secretkey).encode('utf-8')
 
 async def get_apikey_user(sor, apikey, client_ip):
 	f = get_serverenv('password_encode')
