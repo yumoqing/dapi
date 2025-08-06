@@ -5,7 +5,7 @@ async with db.sqlorContext(dbname) as sor:
 	orgid = await get_userorgid()
 	userid = await get_user()
 	ns = {
-		"id": uuid(),
+		"id": params_kw.id,
 		"name": params_kw.appname,
 		"description": params_kw.description,
 		"secretkey": uuid(),
