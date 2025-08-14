@@ -72,7 +72,7 @@ async def deerer_auth(sor, request):
 		return None
 	client_ip = request['client_ip']
 	deer_data = auth[7:]
-	appid, cyber = bear_data.split('-:-')
+	appid, cyber = deer_data.split('-:-')
 	secretkey = await get_secretkey(sor, appid)
 	try:
 		txt = aes_decode_b64(secretkey, cyber)
