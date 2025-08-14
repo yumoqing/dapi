@@ -4,7 +4,7 @@ from appPublic.timeUtils import curDateString
 from appPublic.aes import aes_decode_b64
 from appPublic.uniqueID import getID
 from time import time
-from ahserver.serverenv import ServerEnv
+from ahserver.serverenv import get_serverenv
 from ahserver.auth_api import get_session_userinfo, user_login
 from sqlor.dbpools import DBPools
 from rbac.check_perm import create_org, create_user
