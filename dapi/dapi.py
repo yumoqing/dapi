@@ -58,9 +58,9 @@ async def bearer_auth(sor, request):
 		return None
 	apikey = auth[7:]
 	client_ip = request['client_ip']
-	return await apikey_user(apikey, client_ip)
+	return await apikey_user(sor, apikey, client_ip)
 
-async def apikey_user(apikey, client_ip):
+async def apikey_user(sor, apikey, client_ip):
 	if apikey is None:
 		return None
 	user = await get_apikey_user(sor, apikey, client_ip)
@@ -75,9 +75,9 @@ async def deerer_auth(sor, request):
 		return None
 	deer_data = auth[7:]
 	client_ip = request['client_ip']
-	return await deerer_user(deer_data, client_ip)
+	return await deerer_user(sor, deer_data, client_ip)
 
-async def deerer_user(deer_data, client_ip):
+async def deerer_user(sor, deer_data, client_ip):
 	appid, cyber = deer_data.split('-:-')
 	secretkey = await get_secretkey(sor, appid)
 	try:
