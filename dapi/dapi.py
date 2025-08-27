@@ -55,12 +55,12 @@ where a.userid = b.id
 	return rec
 
 async def bearer_auth(sor, request):
-	auth = request.headers.get('Authentication')
+	auth = request.headers.get('Authorization')
 	if auth is None:
-		debug(f'headers has not "Authentication"')
+		debug(f'headers has not "Authorization"')
 		return None
 	if not auth.startswith('Bearer '):
-		debug(f'"Authentication" not starts with "Bearer "')
+		debug(f'"Authorization" not starts with "Bearer "')
 		return None
 	apikey = auth[7:]
 	client_ip = request['client_ip']
@@ -75,7 +75,7 @@ async def apikey_user(sor, apikey, client_ip):
 	return user.id
 
 async def deerer_auth(sor, request):
-	auth = request.headers.get('Authentication')
+	auth = request.headers.get('Authorization')
 	if auth is None:
 		return None
 	if not auth.startswith('Deerer '):
