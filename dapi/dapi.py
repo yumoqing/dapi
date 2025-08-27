@@ -43,18 +43,24 @@ where a.userid = b.id
 	if len(recs) < 1:
 		debug(f'{apikey=} not registered')
 		return None
-	ips = rec[i].allowedips.split(',')
+	rec = recs[0]
+	if rec.allowips is None:
+		return rec
+
+	ips = rec.allowedips.split(',')
 	ips = [ ip.strip() for ip in ips ]
 	if client_ip not in ips:
-		debug(f' {client_ip} not in {ips=}')
+		debug(f' {client_ip} not in {rec.allowips=}')
 		return None
-	return recs[0]
+	return rec
 
 async def bearer_auth(sor, request):
 	auth = request.headers.get('Authentication')
 	if auth is None:
+		debug(f'headers has not "Authentication"')
 		return None
 	if not auth.startswith('Bearer '):
+		debug(f'"Authentication" not starts with "Bearer "')
 		return None
 	apikey = auth[7:]
 	client_ip = request['client_ip']
@@ -62,6 +68,7 @@ async def bearer_auth(sor, request):
 
 async def apikey_user(sor, apikey, client_ip):
 	if apikey is None:
+		debug(f'keykey is None')
 		return None
 	user = await get_apikey_user(sor, apikey, client_ip)
 	await user_login(user.id, username=user.username, userorgid=user.orgid)
