@@ -71,6 +71,9 @@ async def apikey_user(sor, apikey, client_ip):
 		debug(f'keykey is None')
 		return None
 	user = await get_apikey_user(sor, apikey, client_ip)
+	if user is None:
+		debug(f'get_apikey_user() {apikey=}, {client_ip} return None')
+		return None
 	await user_login(user.id, username=user.username, userorgid=user.orgid)
 	return user.id
 
