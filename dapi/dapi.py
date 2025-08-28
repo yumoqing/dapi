@@ -34,7 +34,7 @@ async def get_apikey_user(sor, apikey, client_ip):
 	f = get_serverenv('password_encode')
 	apikey = f(apikey)
 	sql = """select u.*, b.allowedips from downapikey a, users u, downapp b
-where a.userid = b.id 
+where a.userid = u.id 
 	and b.id = a.dappid
 	and apikey=${apikey}$ 
 	and expired_date > ${today}$"""
