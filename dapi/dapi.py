@@ -64,9 +64,9 @@ async def bearer_auth(sor, request):
 		return None
 	apikey = auth[7:]
 	client_ip = request['client_ip']
-	return await apikey_user(sor, apikey, client_ip)
+	return await apikey_user(sor, apikey, client_ip, request)
 
-async def apikey_user(sor, apikey, client_ip):
+async def apikey_user(sor, apikey, client_ip, request):
 	if apikey is None:
 		debug(f'keykey is None')
 		return None
@@ -74,7 +74,7 @@ async def apikey_user(sor, apikey, client_ip):
 	if user is None:
 		debug(f'get_apikey_user() {apikey=}, {client_ip} return None')
 		return None
-	await user_login(user.id, username=user.username, userorgid=user.orgid)
+	await user_login(request, user.id, username=user.username, userorgid=user.orgid)
 	return user.id
 
 async def deerer_auth(sor, request):
@@ -85,15 +85,15 @@ async def deerer_auth(sor, request):
 		return None
 	deer_data = auth[7:]
 	client_ip = request['client_ip']
-	return await deerer_user(sor, deer_data, client_ip)
+	return await deerer_user(sor, deer_data, client_ip, request)
 
-async def deerer_user(sor, deer_data, client_ip):
+async def deerer_user(sor, deer_data, client_ip, request):
 	appid, cyber = deer_data.split('-:-')
 	secretkey = await get_secretkey(sor, appid)
 	try:
 		txt = aes_decode_b64(secretkey, cyber)
 		t, apikey = txt.split(':')
-		return await apikey_user(apikey, client_ip)
+		return await apikey_user(apikey, client_ip, request)
 	except Exception as e:
 		exception(f'{e}, {auth=},{secretkey=}')
 		return None
