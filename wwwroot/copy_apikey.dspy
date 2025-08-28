@@ -39,7 +39,7 @@ where a.id = b.dappid
 					"options":{
 						"wrap":True,
 						"halign":"left",
-						"text":f"apikey={r.apikey}"
+						"text":f"apikey={password_decode(r.apikey)}"
 					}
 				},
 				{
@@ -47,7 +47,7 @@ where a.id = b.dappid
 					"options":{
 						"wrap":True,
 						"halign":"left",
-						"text":f"secretkey={r.secretkey}"
+						"text":f"secretkey={password_decode(r.secretkey)}"
 					}
 				}
 			]

@@ -8,7 +8,7 @@ async with db.sqlorContext(dbname) as sor:
 		"id": params_kw.id,
 		"name": params_kw.appname,
 		"description": params_kw.description,
-		"secretkey": uuid(),
+		"secretkey": password_encode(uuid()),
 		"allowedips": params_kw.allowedips,
 		"orgid": orgid
 	}
@@ -17,10 +17,10 @@ async with db.sqlorContext(dbname) as sor:
 		"id": uuid(),
 		"dappid": ns['id'],
 		"userid": userid,
-		"apikey": uuid(),
+		"apikey": password_encode(uid()),
 		"enabled_date": curDateString(),
 		"expired_date": '9999-12-31'
 	}
 	await sor.C('downapikey', ns1)
-	return UiMessage(title="create apikey", message=f"appid={ns['id']}, apikey={ns1['apikey']}, secretkey={ns['secretkey']}")
+	return UiMessage(title="create apikey", message=f"apikey created")
 return UiError(title='create apikey', message='add apikey error')
