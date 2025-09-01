@@ -17,7 +17,7 @@ async with db.sqlorContext(dbname) as sor:
 		"id": uuid(),
 		"dappid": ns['id'],
 		"userid": userid,
-		"apikey": password_encode(uid()),
+		"apikey": password_encode(uuid()),
 		"enabled_date": curDateString(),
 		"expired_date": '9999-12-31'
 	}
