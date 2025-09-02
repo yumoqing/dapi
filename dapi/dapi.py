@@ -93,9 +93,9 @@ async def deerer_user(sor, deer_data, client_ip, request):
 	try:
 		txt = aes_decode_b64(secretkey, cyber)
 		t, apikey = txt.split(':')
-		return await apikey_user(apikey, client_ip, request)
+		return await apikey_user(sor, apikey, client_ip, request)
 	except Exception as e:
-		exception(f'{e}, {auth=},{secretkey=}')
+		exception(f'{e}, {deer_data=},{secretkey=}')
 		return None
 			
 def return_error(code):
