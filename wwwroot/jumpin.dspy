@@ -5,6 +5,6 @@ if deerer is None:
 db = DBPools()
 dbname = get_module_dbname('dapi')
 async with db.sqlorContext(dbname) as sor:
-	userid = await deerer_user(sor, deerer, request['client_ip'])
+	userid = await deerer_user(sor, deerer, request['client_ip'], request)
 return await redirect(entire_url('/'))
 
