@@ -5,6 +5,7 @@
         "sortby":"id",
         "confidential_fields":["secretkey"],
 		"logined_userorgid": "orgid",
+		"noedit": true,
         "browserfields": {
             "exclouded": ["secretkey", "orgid" ],
             "alters": {}
