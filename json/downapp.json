@@ -4,7 +4,6 @@
     "params": {
         "sortby":"id",
         "confidential_fields":["secretkey"],
-		"noedit": true,
         "browserfields": {
             "exclouded": ["secretkey", "orgid" ],
             "alters": {}
