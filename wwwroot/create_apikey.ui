@@ -11,6 +11,11 @@
 				"required": true
 			},
 			{
+				"name": "data_widget",
+				"value": "{{params_kw.referer_widget}}",
+				"uitype": "hide"
+			},
+			{
 				"name":"appname",
 				"label":"应用名",
 				"uitype":"str",

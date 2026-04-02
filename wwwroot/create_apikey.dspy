@@ -1,6 +1,18 @@
 debug(f'{params_kw=}')
 dbname = get_module_dbname('dapi')
 db = DBPools()
+kw = {
+	"binds": [
+		{
+			"wid": "self",
+			"event": "dismissed",
+			"actiontype": "script",
+			"target": params_kw.data_widget,
+			"script": "this.render()"
+		}
+	]
+}
+
 async with db.sqlorContext(dbname) as sor:
 	orgid = await get_userorgid()
 	userid = await get_user()
@@ -22,5 +34,5 @@ async with db.sqlorContext(dbname) as sor:
 		"expired_date": '9999-12-31'
 	}
 	await sor.C('downapikey', ns1)
-	return UiMessage(title="create apikey", message=f"apikey created")
+	return UiMessage(title="create apikey", message=f"apikey created", **kw)
 return UiError(title='create apikey', message='add apikey error')
