@@ -7,7 +7,7 @@ kw = {
 			"wid": "self",
 			"event": "dismissed",
 			"actiontype": "script",
-			"target": params_kw.data_widget,
+			"target": 'app.' + params_kw.data_widget,
 			"script": "this.render()"
 		}
 	]
