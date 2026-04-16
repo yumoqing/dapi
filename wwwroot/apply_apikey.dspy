@@ -7,7 +7,7 @@ try:
 		userid = await get_user()
 		dappid = uuid()
 		ns = {
-			"id": dappid
+			"id": dappid,
 			"name": params_kw.appname,
 			"description": params_kw.description,
 			"secretkey": password_encode(uuid()),
@@ -17,7 +17,7 @@ try:
 		await sor.C('downapp', ns)
 		ns1 = {
 			"id": uuid(),
-			"dappid": dappid
+			"dappid": dappid,
 			"userid": userid,
 			"apikey": password_encode(uuid()),
 			"enabled_date": curDateString(),
