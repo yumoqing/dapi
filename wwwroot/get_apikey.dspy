@@ -1,0 +1,38 @@
+debug(f'{params_kw=}')
+env = request._run_ns
+try:
+	async with get_sor_context(env, 'dapi') as sor:
+		orgid = await get_userorgid()
+		userid = await get_user()
+		ns = {
+			"id": params_kw.id,
+			"orgid":orgid,
+			"userid":userid
+		}
+		sql = """select a.*,
+	b.apikey
+	from downapp a, downapikey b
+	where a.id = b.dappid
+		and a.id = ${id}$
+		and a.orgid = ${orgid}$
+		and b.userid = ${userid}$"""
+		recs = await sor.sqlExe(sql, ns)
+		if len(recs):
+			r = recs[0]
+			return {
+				"status":"ok",
+				"data":r
+			}
+		return {
+			"status": "error",
+			"data": {
+				"message": "没有找到用户apikey"
+			}
+		}
+except Exception as e:
+	return {
+		"status": "error",
+		"data": {
+			"message": f"{e}"
+		}
+	}

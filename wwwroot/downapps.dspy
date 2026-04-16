@@ -1,0 +1,36 @@
+env = request._run_ns
+userid = await get_user()
+orgid = await get_userorgid()
+if userid is None:
+	return {
+		"status": "error",
+		"data": {
+			"message": "need login"
+		}
+	}
+
+try:
+	async with get_sor_context(env, 'dapi') as sor:
+		today = curDateString()
+		sql = """select a.id, a.name,b.id as apikeyid,
+	from downapp a, downapikey b
+	where a.orgid=${orgid}$
+		and b.userid=${userid}$
+		and a.id = b.dappid
+		and b.enabled_date <= ${today}$
+		and b.expired_date > ${today}$
+	"""
+		recs = await sor.sqlExe(sql, {'orgid': orgid})
+		return {
+			"status": "ok",
+			"data": {
+				"apikeys": recs
+			}
+		}
+except Exception as e:
+	return {
+		"status": "error",
+		"data": {
+			"message": f'{e},{today=}'
+		}
+	}
