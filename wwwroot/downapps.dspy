@@ -20,7 +20,11 @@ try:
 		and b.enabled_date <= ${today}$
 		and b.expired_date > ${today}$
 	"""
-		recs = await sor.sqlExe(sql, {'orgid': orgid})
+		recs = await sor.sqlExe(sql, {
+			'orgid': orgid,
+			'userid': userid,
+			'today': today
+		})
 		return {
 			"status": "ok",
 			"data": {

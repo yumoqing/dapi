@@ -5,8 +5,9 @@ try:
 	async with get_sor_context(env, 'dapi') as sor:
 		orgid = await get_userorgid()
 		userid = await get_user()
+		dappid = uuid()
 		ns = {
-			"id": uuid(),
+			"id": dappid
 			"name": params_kw.appname,
 			"description": params_kw.description,
 			"secretkey": password_encode(uuid()),
@@ -16,7 +17,7 @@ try:
 		await sor.C('downapp', ns)
 		ns1 = {
 			"id": uuid(),
-			"dappid": ns['id'],
+			"dappid": dappid
 			"userid": userid,
 			"apikey": password_encode(uuid()),
 			"enabled_date": curDateString(),
