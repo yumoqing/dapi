@@ -6,7 +6,7 @@ try:
 		orgid = await get_userorgid()
 		userid = await get_user()
 		ns = {
-			"id": params_kw.id,
+			"id": uuid(),
 			"name": params_kw.appname,
 			"description": params_kw.description,
 			"secretkey": password_encode(uuid()),

@@ -12,7 +12,7 @@ if userid is None:
 try:
 	async with get_sor_context(env, 'dapi') as sor:
 		today = curDateString()
-		sql = """select a.id, a.name,b.id as apikeyid,
+		sql = """select a.id, a.name,b.id as apikeyid
 	from downapp a, downapikey b
 	where a.orgid=${orgid}$
 		and b.userid=${userid}$
