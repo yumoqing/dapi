@@ -19,10 +19,12 @@ try:
 		recs = await sor.sqlExe(sql, ns)
 		if len(recs):
 			r = recs[0]
+			r.apikey = password_decode(r.apikey)
 			return {
 				"status":"ok",
 				"data":r
 			}
+
 		return {
 			"status": "error",
 			"data": {
