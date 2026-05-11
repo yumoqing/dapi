@@ -84,28 +84,30 @@ async def apikey_user(sor, apikey, client_ip, request):
 	return user.id
 
 async def ensure_downappuser_role_and_assign(sor, userid, dappid):
-	"""确保downappuser角色存在（id=dappid），并分配给用户"""
+	"""确保downapp/logined角色存在，并分配给用户"""
 	try:
 		# 检查角色是否存在，不存在则创建
-		roles = await sor.R('role', {'id': dappid})
+		roles = await sor.R('role', {'orgtypeid': 'downapp', 'name': 'logined'})
 		if not roles:
+			roleid = getID()
 			await sor.C('role', {
-				'id': dappid,
-				'name': 'downappuser',
-				'orgtypeid': '*'
+				'id': roleid,
+				'name': 'logined',
+				'orgtypeid': 'downapp'
 			})
-			debug(f'created downappuser role: {dappid}')
+			debug(f'created logined role (downapp): {roleid}')
+		else:
+			roleid = roles[0].id
 		
 		# 检查用户是否已有该角色
-		existing = await sor.R('userrole', {'userid': userid, 'roleid': dappid})
+		existing = await sor.R('userrole', {'userid': userid, 'roleid': roleid})
 		if not existing:
-			from appPublic.uniqueID import getID
 			await sor.C('userrole', {
 				'id': getID(),
 				'userid': userid,
-				'roleid': dappid
+				'roleid': roleid
 			})
-			debug(f'assigned downappuser role {dappid} to user {userid}')
+			debug(f'assigned logined role {roleid} (downapp) to user {userid}')
 	except Exception as e:
 		exception(f'ensure_downappuser_role_and_assign error: {e}')
 
