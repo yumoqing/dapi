@@ -1,4 +1,4 @@
-from dapi.dapi import sync_user, bearer_auth, deerer_auth, deerer_user, apikey_user
+from dapi.dapi import sync_user, bearer_auth, deerer_auth, deerer_user, apikey_user, create_user_apikey
 from ahserver.serverenv import ServerEnv
 from rbac.check_perm import register_auth_method
 
@@ -7,6 +7,7 @@ def load_dapi():
 	env.sync_user = sync_user
 	env.deerer_user = deerer_user
 	env.apikey_user = apikey_user
+	env.create_user_apikey = create_user_apikey
 	register_auth_method('Bearer ', bearer_auth)
 	register_auth_method('Deerer ', deerer_auth)
 

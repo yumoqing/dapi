@@ -161,6 +161,70 @@ async def add_apikey(sor, dappid, dorgid, duserid, orgid, userid):
 	await sor.C('downapikey', d)
 	return apikey
 
+async def create_user_apikey(sor, dappid, user_id, user_orgid, **kwargs):
+	"""为已有用户创建dapi apikey
+	
+	Args:
+		sor: sqlor连接对象
+		dappid: dapi应用ID
+		user_id: rbac用户ID
+		user_orgid: 用户机构ID
+		**kwargs: 可选字段（username, name, email等users表字段）
+	
+	Returns:
+		dict: {'status': 'success'|'error', 'apikey': str, 'message': str}
+	"""
+	try:
+		# 检查apikey是否已存在
+		existing = await sor.R('downapikey', {
+			'dappid': dappid,
+			'duserid': user_id,
+			'dorgid': user_orgid
+		})
+		
+		if existing:
+			# 返回现有apikey
+			f = get_serverenv('password_decode')
+			apikey = f(existing[0].apikey)
+			return {
+				'status': 'success',
+				'apikey': apikey,
+				'user_id': user_id,
+				'message': '用户apikey已存在'
+			}
+		
+		# 创建新apikey
+		apikey_id = getID()
+		apikey_value = getID()
+		
+		ns = {
+			'id': apikey_id,
+			'dappid': dappid,
+			'dorgid': user_orgid,
+			'duserid': user_id,
+			'orgid': user_orgid,
+			'userid': user_id,
+			'apikey': password_encode(apikey_value),
+			'enabled': '1',
+			'created_at': curDateString(),
+			'expires_at': '9999-12-31'
+		}
+		
+		await sor.C('downapikey', ns)
+		
+		return {
+			'status': 'success',
+			'apikey': apikey_value,
+			'user_id': user_id,
+			'message': 'apikey创建成功'
+		}
+	except Exception as e:
+		exception(f'create_user_apikey error: {e}')
+		return {
+			'status': 'error',
+			'message': f'创建apikey失败: {str(e)}'
+		}
+
 async def sync_user(request, params_kw, *args, **kw):
 	dappid = params_kw.dappid
 	db = DBPools()
