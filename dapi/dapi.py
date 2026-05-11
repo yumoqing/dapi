@@ -33,24 +33,24 @@ async def get_secretkey(sor, appid):
 async def get_apikey_user(sor, apikey, client_ip):
 	f = get_serverenv('password_encode')
 	apikey = f(apikey)
-	sql = """select u.*, b.allowedips from downapikey a, users u, downapp b
+	sql = """select u.*, a.dappid, b.allowedips from downapikey a, users u, downapp b
 where a.userid = u.id 
 	and b.id = a.dappid
-	and apikey=${apikey}$ 
-	and expired_date > ${today}$"""
+	and a.apikey=${apikey}$ 
+	and a.expires_at > ${today}$"""
 
 	recs = await sor.sqlExe(sql, {"apikey":apikey, 'today': curDateString()})
 	if len(recs) < 1:
 		debug(f'{apikey=} not registered')
 		return None
 	rec = recs[0]
-	if rec.allowips is None:
+	if rec.allowedips is None:
 		return rec
 
 	ips = rec.allowedips.split(',')
 	ips = [ ip.strip() for ip in ips ]
 	if client_ip not in ips:
-		debug(f' {client_ip} not in {rec.allowips=}')
+		debug(f' {client_ip} not in {rec.allowedips=}')
 		return None
 	return rec
 
@@ -75,7 +75,48 @@ async def apikey_user(sor, apikey, client_ip, request):
 		debug(f'get_apikey_user() {apikey=}, {client_ip} return None')
 		return None
 	await user_login(request, user.id, username=user.username, userorgid=user.orgid)
+	
+	# 认证成功后，给用户添加downappuser角色（角色id=downapp.id）
+	dappid = getattr(user, 'dappid', None)
+	if dappid:
+		await ensure_downappuser_role_and_assign(sor, user.id, dappid)
+	
 	return user.id
+
+async def ensure_downappuser_role_and_assign(sor, userid, dappid):
+	"""确保downappuser角色存在（id=dappid），并分配给用户"""
+	try:
+		# 检查角色是否存在，不存在则创建
+		roles = await sor.R('role', {'id': dappid})
+		if not roles:
+			await sor.C('role', {
+				'id': dappid,
+				'name': 'downappuser',
+				'orgtypeid': '*'
+			})
+			debug(f'created downappuser role: {dappid}')
+		
+		# 检查用户是否已有该角色
+		existing = await sor.R('userrole', {'userid': userid, 'roleid': dappid})
+		if not existing:
+			from appPublic.uniqueID import getID
+			await sor.C('userrole', {
+				'id': getID(),
+				'userid': userid,
+				'roleid': dappid
+			})
+			debug(f'assigned downappuser role {dappid} to user {userid}')
+	except Exception as e:
+		exception(f'ensure_downappuser_role_and_assign error: {e}')
+
+async def x_api_key_auth(sor, request):
+	"""Anthropic标准认证模式：从 x-api-key header 读取apikey"""
+	apikey = request.headers.get('x-api-key')
+	if apikey is None:
+		debug(f'x-api-key header not found')
+		return None
+	client_ip = request['client_ip']
+	return await apikey_user(sor, apikey, client_ip, request)
 
 async def deerer_auth(sor, request):
 	auth = request.headers.get('Authorization')
