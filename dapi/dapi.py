@@ -37,7 +37,7 @@ async def get_apikey_user(sor, apikey, client_ip):
 where a.userid = u.id 
 	and b.id = a.dappid
 	and a.apikey=${apikey}$ 
-	and a.expires_at > ${today}$"""
+	and a.expired_date > ${today}$"""
 
 	recs = await sor.sqlExe(sql, {"apikey":apikey, 'today': curDateString()})
 	if len(recs) < 1:
@@ -190,7 +190,7 @@ async def add_user(sor, user):
 async def add_apikey(sor, dappid, dorgid, duserid, orgid, userid):
 	apikey = getID()
 	d = {
-		'id': getID,
+		'id': getID(),
 		'dappid': dappid, 
 		'dorgid': dorgid,
 		'duserid': duserid,
@@ -199,7 +199,7 @@ async def add_apikey(sor, dappid, dorgid, duserid, orgid, userid):
 		'apikey': id,
 		'enabled': '1',
 		'created_at': curDateString(),
-		'expires_at': '9999-12-31'
+		'expired_date': '9999-12-31'
 	}
 	await sor.C('downapikey', d)
 	return apikey
@@ -250,7 +250,7 @@ async def create_user_apikey(sor, dappid, user_id, user_orgid, **kwargs):
 			'apikey': password_encode(apikey_value),
 			'enabled': '1',
 			'created_at': curDateString(),
-			'expires_at': '9999-12-31'
+			'expired_date': '9999-12-31'
 		}
 		
 		await sor.C('downapikey', ns)
