@@ -45,7 +45,7 @@ where a.userid = u.id
 		debug(f'{apikey=} not registered')
 		return None
 	rec = recs[0]
-	if rec.allowedips is None:
+	if rec.allowedips is None or rec.allowedips == '':
 		return rec
 
 	ips = rec.allowedips.split(',')
