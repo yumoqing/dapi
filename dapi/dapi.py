@@ -227,15 +227,22 @@ async def create_user_apikey(sor, dappid, user_id, user_orgid, **kwargs):
 		})
 		
 		if existing:
-			# 返回现有apikey
-			f = get_serverenv('password_decode')
-			apikey = f(existing[0].apikey)
-			return {
-				'status': 'success',
-				'apikey': apikey,
-				'user_id': user_id,
-				'message': '用户apikey已存在'
-			}
+			# 验证关联的 users 记录是否仍然存在
+			user_records = await sor.R('users', {'id': existing[0].userid})
+			if not user_records:
+				# downapikey 有记录但 users 表无对应用户（脏数据），清理后重新创建
+				debug(f'create_user_apikey: downapikey exists but user {existing[0].userid} not found, recreating')
+				await sor.D('downapikey', {'id': existing[0].id})
+			else:
+				# 返回现有apikey
+				f = get_serverenv('password_decode')
+				apikey = f(existing[0].apikey)
+				return {
+					'status': 'success',
+					'apikey': apikey,
+					'user_id': user_id,
+					'message': '用户apikey已存在'
+				}
 		
 		# 创建新apikey
 		apikey_id = getID()
