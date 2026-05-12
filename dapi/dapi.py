@@ -197,7 +197,7 @@ async def add_apikey(sor, dappid, dorgid, duserid, orgid, userid):
 		'duserid': duserid,
 		'orgid': orgid,
 		'userid': userid,
-		'apikey': id,
+		'apikey': apikey,
 		'enabled': '1',
 		'created_at': curDateString(),
 		'expired_date': '9999-12-31'
