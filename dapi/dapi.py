@@ -31,9 +31,9 @@ async def get_secretkey(sor, appid):
 	return f(secretkey)
 
 async def get_apikey_user(sor, apikey, client_ip):
-	debug(f'{apikey=}, {client_ip=}')
 	f = get_serverenv('password_encode')
 	apikey = f(apikey)
+	debug(f'{apikey=}')
 	sql = """select u.*, a.dappid, b.allowedips from downapikey a, users u, downapp b
 where a.userid = u.id 
 	and b.id = a.dappid
