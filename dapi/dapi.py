@@ -156,20 +156,20 @@ def return_success(data):
 	}
 
 async def get_orgid_by_dorgid(sor, dappid, dorgid):
-	d = {
-		'dappid':dappid,
-		'dorgid':dorgid
-	}
-	recs = await sor.R('downapikey', d)
+	"""检查外部机构ID(dorgid)在本系统中是否已存在。
+	
+	dorgid 即为本系统 orgid，直接检查 organization 表。
+	"""
+	recs = await sor.R('organization', {'id': dorgid})
 	if len(recs) < 1:
 		return None
-	return recs[0].orgid
+	return dorgid
 
-async def check_duserid_exists(sor, dappid, dorgid, duserid):
+async def check_duserid_exists(sor, dappid, duserid):
+	"""检查用户(dappid+duserid)是否已存在apikey"""
 	d = {
 		'dappid': dappid,
-		'duserid': duserid,
-		'dorgid': dorgid
+		'userid': duserid,
 	}
 	recs = await sor.R('downapikey', d)
 	if len(recs):
@@ -188,18 +188,19 @@ async def add_user(sor, user):
 	await create_user(sor, user, roles=user.get('roles'))
 	return id
 	
-async def add_apikey(sor, dappid, dorgid, duserid, orgid, userid):
+async def add_apikey(sor, dappid, userid):
+	"""为用户创建apikey。
+	
+	downapikey表字段: id, dappid, userid, apikey, enabled_date, expired_date
+	duserid = 本系统 userid，直接存入 userid 字段。
+	"""
 	apikey = getID()
 	d = {
 		'id': getID(),
 		'dappid': dappid, 
-		'dorgid': dorgid,
-		'duserid': duserid,
-		'orgid': orgid,
 		'userid': userid,
 		'apikey': apikey,
-		'enabled': '1',
-		'created_at': curDateString(),
+		'enabled_date': curDateString(),
 		'expired_date': '9999-12-31'
 	}
 	await sor.C('downapikey', d)
@@ -219,45 +220,32 @@ async def create_user_apikey(sor, dappid, user_id, user_orgid, **kwargs):
 		dict: {'status': 'success'|'error', 'apikey': str, 'message': str}
 	"""
 	try:
-		# 检查apikey是否已存在
+		# downapikey表实际字段: id, dappid, userid, apikey, enabled_date, expired_date
+		# 按(dappid, userid)唯一性查询
 		existing = await sor.R('downapikey', {
 			'dappid': dappid,
-			'duserid': user_id,
-			'dorgid': user_orgid
+			'userid': user_id,
 		})
 		
 		if existing:
-			# 验证关联的 users 记录是否仍然存在
-			user_records = await sor.R('users', {'id': existing[0].userid})
-			if not user_records:
-				# downapikey 有记录但 users 表无对应用户（脏数据），清理后重新创建
-				debug(f'create_user_apikey: downapikey exists but user {existing[0].userid} not found, recreating')
-				await sor.D('downapikey', {'id': existing[0].id})
-			else:
-				# 返回现有apikey
-				f = get_serverenv('password_decode')
-				apikey = f(existing[0].apikey)
-				return {
-					'status': 'success',
-					'apikey': apikey,
-					'user_id': user_id,
-					'message': '用户apikey已存在'
-				}
+			# 返回现有apikey
+			f = get_serverenv('password_decode')
+			apikey = f(existing[0].apikey)
+			return {
+				'status': 'success',
+				'apikey': apikey,
+				'user_id': user_id,
+				'message': '用户apikey已存在'
+			}
 		
 		# 创建新apikey
-		apikey_id = getID()
 		apikey_value = getID()
-		
 		ns = {
-			'id': apikey_id,
+			'id': getID(),
 			'dappid': dappid,
-			'dorgid': user_orgid,
-			'duserid': user_id,
-			'orgid': user_orgid,
 			'userid': user_id,
 			'apikey': password_encode(apikey_value),
-			'enabled': '1',
-			'created_at': curDateString(),
+			'enabled_date': curDateString(),
 			'expired_date': '9999-12-31'
 		}
 		
@@ -303,13 +291,13 @@ async def sync_user(request, params_kw, *args, **kw):
 						return return_error(-2)
 				u['orgid'] = o['id']
 				u['roles'] = roles
-				exists = check_duserid_exists(sor, dappid, dorgid, duserid)
+				exists = check_duserid_exists(sor, dappid, duserid)
 				if exists:
 					return return_error(-1)
 				userid = await add_user(sor, u)
 				if userid is None:
 					return return_error(-3)
-				apikey = await add_apikey(sor, dappid, orgid, userid, u)
+				apikey = await add_apikey(sor, dappid, userid)
 				if apikey is None:
 					return return_error(-4)
 				ret_users.append({
