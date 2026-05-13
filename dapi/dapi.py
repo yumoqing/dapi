@@ -171,7 +171,7 @@ async def check_duserid_exists(sor, dappid, dorgid, duserid):
 		'duserid': duserid,
 		'dorgid': dorgid
 	}
-	recs = await sor.R('kwdownapikey', d)
+	recs = await sor.R('downapikey', d)
 	if len(recs):
 		return True
 	return False
@@ -219,41 +219,30 @@ async def create_user_apikey(sor, dappid, user_id, user_orgid, **kwargs):
 		dict: {'status': 'success'|'error', 'apikey': str, 'message': str}
 	"""
 	try:
-		# 检查apikey是否已存在 — 先查 kwdownapikey 确认用户级别是否存在
-		kw_existing = await sor.R('kwdownapikey', {
+		# 检查apikey是否已存在
+		existing = await sor.R('downapikey', {
 			'dappid': dappid,
 			'duserid': user_id,
 			'dorgid': user_orgid
 		})
 		
-		if kw_existing:
-			# 用户已有 apikey，从 downapikey 获取
-			da_existing = await sor.R('downapikey', {
-				'dappid': dappid,
-				'duserid': user_id,
-				'dorgid': user_orgid
-			})
-			if da_existing:
-				# 验证关联的 users 记录是否仍然存在
-				user_records = await sor.R('users', {'id': da_existing[0].userid})
-				if not user_records:
-					# downapikey 有记录但 users 表无对应用户（脏数据），清理后重新创建
-					debug(f'create_user_apikey: downapikey exists but user {da_existing[0].userid} not found, recreating')
-					await sor.D('downapikey', {'id': da_existing[0].id})
-				else:
-					# 返回现有apikey
-					f = get_serverenv('password_decode')
-					apikey = f(da_existing[0].apikey)
-					return {
-						'status': 'success',
-						'apikey': apikey,
-						'user_id': user_id,
-						'message': '用户apikey已存在'
-					}
+		if existing:
+			# 验证关联的 users 记录是否仍然存在
+			user_records = await sor.R('users', {'id': existing[0].userid})
+			if not user_records:
+				# downapikey 有记录但 users 表无对应用户（脏数据），清理后重新创建
+				debug(f'create_user_apikey: downapikey exists but user {existing[0].userid} not found, recreating')
+				await sor.D('downapikey', {'id': existing[0].id})
 			else:
-				# kwdownapikey 有记录但 downapikey 没有（脏数据），清理 kwdownapikey 后重新创建
-				debug(f'create_user_apikey: kwdownapikey exists but downapikey missing, recreating')
-				await sor.D('kwdownapikey', {'id': kw_existing[0].id})
+				# 返回现有apikey
+				f = get_serverenv('password_decode')
+				apikey = f(existing[0].apikey)
+				return {
+					'status': 'success',
+					'apikey': apikey,
+					'user_id': user_id,
+					'message': '用户apikey已存在'
+				}
 		
 		# 创建新apikey
 		apikey_id = getID()
