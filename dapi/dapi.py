@@ -1,7 +1,7 @@
 from traceback import format_exc
 from appPublic.log import debug, exception, info
 from appPublic.timeUtils import curDateString
-from appPublic.aes import aes_decode_b64
+from appPublic.aes import aes_decode_b64, aes_encode_b64
 from appPublic.uniqueID import getID
 from time import time
 from ahserver.serverenv import get_serverenv
@@ -130,6 +130,17 @@ async def deerer_auth(sor, request):
 	deer_data = auth[7:]
 	client_ip = request['client_ip']
 	return await deerer_user(sor, deer_data, client_ip, request)
+
+def deerer_header(appid, sk, apikey):
+	tim = time.time()
+	txt = f'{tim}:{apikey}' 
+	cyber = aes_encode_b64(sk, txt)
+	return f'Deerer {appid}-:-{cyber}'
+
+def deerer_apikey(sk, cyber):
+	txt = aes_decode_b64(sk, cyber)
+	t, apikey = txt.split(':')
+	return apikey
 
 async def deerer_user(sor, deer_data, client_ip, request):
 	appid, cyber = deer_data.split('-:-')
