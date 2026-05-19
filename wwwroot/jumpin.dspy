@@ -1,10 +1,11 @@
 debug(f'jump-in:{params_kw=}')
-deerer = params_kw.deerer
+deerer1 = params_kw.deerer
 if deerer is None:
 	return "error"
 db = DBPools()
 dbname = get_module_dbname('dapi')
 async with db.sqlorContext(dbname) as sor:
+	deerer = deerer1[7:]
 	userid = await deerer_user(sor, deerer, request['client_ip'], request)
 return await redirect(entire_url('/'))
 
