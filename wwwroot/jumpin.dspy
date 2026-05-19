@@ -1,6 +1,6 @@
 debug(f'jump-in:{params_kw=}')
 deerer1 = params_kw.deerer
-if deerer is None:
+if deerer1 is None:
 	return "error"
 db = DBPools()
 dbname = get_module_dbname('dapi')
