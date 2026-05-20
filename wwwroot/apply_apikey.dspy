@@ -32,7 +32,7 @@ try:
 		}
 		await sor.C('downapikey', ns1)
 		return {
-			"status": "ok"
+			"status": "ok",
 			"data": ns
 		}
 except Exception as e:
