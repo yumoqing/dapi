@@ -1,10 +1,17 @@
 debug(f'{params_kw=}')
 db = DBPools()
 env = request._run_ns
+orgid = await get_userorgid()
+userid = await get_user()
+if not userid:
+	return {
+		"status": "error",
+		"data": {
+			"message": "you need login to do this"
+		}
+	}
 try:
 	async with get_sor_context(env, 'dapi') as sor:
-		orgid = await get_userorgid()
-		userid = await get_user()
 		dappid = uuid()
 		ns = {
 			"id": dappid,
@@ -14,7 +21,7 @@ try:
 			"allowedips": params_kw.allowedips,
 			"orgid": orgid
 		}
-		await sor.C('downapp', ns)
+		await sor.C('downapp', ns.copy())
 		ns1 = {
 			"id": uuid(),
 			"dappid": dappid,
@@ -26,6 +33,8 @@ try:
 		await sor.C('downapikey', ns1)
 		return {
 			"status": "ok"
+			"data": ns
+			}
 		}
 except Exception as e:
 	return {
