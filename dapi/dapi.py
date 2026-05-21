@@ -144,7 +144,10 @@ where a.id=b.dappid
 	"""
 	env = ServerEnv()
 	async with get_sor_context(env, 'dapi') as sor:
-		recs = await sor.sqlExe(sql, {'dappid': dappid})
+		recs = await sor.sqlExe(sql, {
+			'dappid': dappid,
+			'userid': userid
+		})
 		if not recs:
 			debug(f'{dappid=}, {userid=} not exist is downapikey')
 			return None
