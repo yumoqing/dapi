@@ -136,7 +136,7 @@ async def get_user_dapp_apikey(dappid, userid):
 	"""
 	获得用户在downapp的apikey
 	"""
-	sql = """b.* from downapp a, downapikey b where a.id=b.dappid and a.id=${dappid}$"""
+	sql = """select b.* from downapp a, downapikey b where a.id=b.dappid and a.id=${dappid}$"""
 	env = ServerEnv()
 	async with get_sor_context(env, 'dapi') as sor:
 		recs = await sor.sqlExe(sql, {'dappid': dappid})
