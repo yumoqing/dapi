@@ -1,0 +1,49 @@
+{
+    "summary": [
+        {
+            "name": "downapp",
+            "title": "下位系统",
+            "primary": [
+                "id"
+            ]
+        }
+    ],
+    "fields": [
+        {
+            "name": "id",
+            "title": "id",
+            "type": "str",
+            "length": 32
+        },
+        {
+            "name": "name",
+            "title": "下位应用名",
+            "type": "str",
+            "length": 200
+        },
+        {
+            "name": "description",
+            "title": "描述",
+            "type": "text",
+            "default": "0"
+        },
+        {
+            "name": "secretkey",
+            "title": "加密密钥",
+            "type": "str",
+            "length": 100
+        },
+        {
+            "name": "allowedips",
+            "title": "允许ip集",
+            "type": "str",
+            "length": 300
+        },
+        {
+            "name": "orgid",
+            "title": "所属机构",
+            "type": "str",
+            "length": 32
+        }
+    ]
+}

@@ -1,0 +1,61 @@
+{
+    "summary": [
+        {
+            "name": "downapikey",
+            "title": "下位系统apikey",
+            "primary": [
+                "id"
+            ]
+        }
+    ],
+    "fields": [
+        {
+            "name": "id",
+            "title": "id",
+            "type": "str",
+            "length": 32
+        },
+        {
+            "name": "dappid",
+            "title": "下位系统id",
+            "type": "str",
+            "length": 32
+        },
+        {
+            "name": "userid",
+            "title": "用户id",
+            "type": "str",
+            "length": 32
+        },
+        {
+            "name": "apikey",
+            "title": "akikey",
+            "type": "str",
+            "length": 100
+        },
+        {
+            "name": "enabled_date",
+            "title": "创建日期",
+            "type": "date"
+        },
+        {
+            "name": "expired_date",
+            "title": "失效日期",
+            "type": "date"
+        }
+    ],
+    "codes": [
+        {
+            "field": "dappid",
+            "table": "downapp",
+            "valuefield": "id",
+            "textfield": "name"
+        },
+        {
+            "field": "userid",
+            "table": "users",
+            "valuefield": "id",
+            "textfield": "username"
+        }
+    ]
+}
