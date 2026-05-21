@@ -131,6 +131,21 @@ async def deerer_auth(sor, request):
 	client_ip = request['client_ip']
 	return await deerer_user(sor, deer_data, client_ip, request)
 
+async def get_user_dapp_apikey(dappid, userid):
+	"""
+	获得用户在downapp的apikey
+	"""
+	sql = """b.* from downapp a, downapikey b where a.id=b.dappid and a.id=${dappid}$"""
+	env = ServerEnv()
+	async with get_sor_context(env, 'dapi') as sor:
+		recs = await sor.sqlExe(sql, {'dappid': dappid})
+		if not recs:
+			debug(f'{dappid=}, {userid=} not exist is downapikey')
+			return None
+		apikey = env.password_decode(recs[0].apikey)
+		return apikey
+	return None
+
 def deerer_header(appid, sk, apikey):
 	tim = time.time()
 	txt = f'{tim}:{apikey}' 
