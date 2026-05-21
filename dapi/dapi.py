@@ -4,6 +4,7 @@ from appPublic.timeUtils import curDateString
 from appPublic.aes import aes_decode_b64, aes_encode_b64
 from appPublic.uniqueID import getID
 from time import time
+from sqlor.dbpools import get_sor_context
 from ahserver.serverenv import get_serverenv, ServerEnv
 from ahserver.auth_api import get_session_userinfo, user_login
 from sqlor.dbpools import DBPools
