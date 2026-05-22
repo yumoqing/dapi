@@ -22,15 +22,17 @@ try:
 			"orgid": orgid
 		}
 		await sor.C('downapp', ns.copy())
+		apikey = password_encode(uuid()),
 		ns1 = {
 			"id": uuid(),
 			"dappid": dappid,
 			"userid": userid,
-			"apikey": password_encode(uuid()),
+			"apikey": password_encode(apikey),
 			"enabled_date": curDateString(),
 			"expired_date": '9999-12-31'
 		}
 		await sor.C('downapikey', ns1)
+		ns['apikey'] = apikey
 		return {
 			"status": "ok",
 			"data": ns
