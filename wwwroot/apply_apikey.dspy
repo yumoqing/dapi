@@ -22,7 +22,7 @@ try:
 			"orgid": orgid
 		}
 		await sor.C('downapp', ns.copy())
-		apikey = password_encode(uuid())
+		apikey = uuid()
 		ns1 = {
 			"id": uuid(),
 			"dappid": dappid,
