@@ -1,0 +1,29 @@
+debug(f'{params_kw=}')
+dbname = get_module_dbname('dapi')
+db = DBPools()
+userid = await get_user()
+orgid = await get_userorgid()
+if not userid:
+	return UiError(title='删除API Key', message='需要登录')
+
+try:
+	async with db.sqlorContext(dbname) as sor:
+		# 验证权限
+		ns = {
+			"id": params_kw.id,
+			"orgid": orgid
+		}
+		sql = """select * from downapp 
+			where id = ${id}$ and orgid = ${orgid}$"""
+		recs = await sor.sqlExe(sql, ns)
+		if not recs:
+			return UiError(title='删除API Key', message='API Key不存在或无权访问')
+		
+		# 删除downapikey
+		await sor.D('downapikey', {"dappid": params_kw.id})
+		# 删除downapp
+		await sor.D('downapp', {"id": params_kw.id})
+		
+		return UiMessage(title="删除API Key", message="API Key删除成功")
+except Exception as e:
+	return UiError(title='删除API Key', message=f'删除失败: {e}')

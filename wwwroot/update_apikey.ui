@@ -1,0 +1,49 @@
+{
+	"widgettype":"Form",
+	"options":{
+		"title":"更新API Key",
+		"description":"更新应用信息和API Key配置",
+		"fields":[
+			{
+				"name":"id",
+				"label":"应用ID",
+				"uitype":"str",
+				"readonly": true
+			},
+			{
+				"name":"appname",
+				"label":"应用名称",
+				"uitype":"str",
+				"required": true
+			},
+			{
+				"name":"description",
+				"label":"应用描述",
+				"uitype":"text"
+			},
+			{
+				"name":"allowedips",
+				"label":"允许的IP集",
+				"uitype":"str",
+				"placeholder": "多个IP用逗号分隔"
+			},
+			{
+				"name":"regenerate_apikey",
+				"label":"重新生成API Key",
+				"uitype":"checkbox",
+				"description": "勾选后将重新生成API Key，原Key将失效"
+			}
+		]
+	},
+	"binds":[
+		{
+			"wid":"self",
+			"event":"submit",
+			"actiontype":"urlwidget",
+			"target":"self",
+			"options":{
+				"url":"{{entire_url('./update_apikey.dspy')}}"
+			}
+		}
+	]
+}

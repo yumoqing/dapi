@@ -1,11 +1,10 @@
 {
     "tblname": "downapp",
-    "title":"下位系统",
+    "title":"API Key管理",
     "params": {
         "sortby":"id",
         "confidential_fields":["secretkey"],
 		"logined_userorgid": "orgid",
-		"noedit": true,
         "browserfields": {
             "exclouded": ["secretkey", "orgid" ],
             "alters": {}
@@ -17,14 +16,26 @@
 			"tools":[
 				{
 					"name":"create_apikey",
-					"label":"创建apikey",
+					"label":"创建API Key",
 					"icon":"{{entire_url('/imgs/newkey.svg')}}"
 				},
 				{
 					"name":"copy_apikey",
-					"label":"复制apikey",
+					"label":"复制API Key",
 					"selected_row":true,
 					"icon":"{{entire_url('/imgs/copy.svg')}}"
+				},
+				{
+					"name":"update_apikey",
+					"label":"更新API Key",
+					"selected_row":true,
+					"icon":"{{entire_url('/imgs/edit.svg')}}"
+				},
+				{
+					"name":"delete_apikey",
+					"label":"删除API Key",
+					"selected_row":true,
+					"icon":"{{entire_url('/imgs/delete.svg')}}"
 				}
 			]
 		},
@@ -55,6 +66,29 @@
 				},
 				"options":{
 					"url":"{{entire_url('/dapi/copy_apikey.dspy')}}"
+				}
+			},
+			{
+				"wid":"self",
+				"event":"update_apikey",
+				"actiontype":"urlwidget",
+				"target":"PopupWindow",
+				"popup_options":{
+					"width":"50%",
+					"height":"50%",
+					"archor":"cr"
+				},
+				"options":{
+					"url":"{{entire_url('/dapi/update_apikey.dspy')}}"
+				}
+			},
+			{
+				"wid":"self",
+				"event":"delete_apikey",
+				"actiontype":"urlwidget",
+				"target":"self",
+				"options":{
+					"url":"{{entire_url('/dapi/delete_apikey.dspy')}}"
 				}
 			}
 		]

@@ -1,0 +1,87 @@
+debug(f'{params_kw=}')
+dbname = get_module_dbname('dapi')
+db = DBPools()
+userid = await get_user()
+orgid = await get_userorgid()
+if not userid:
+	return {
+		"widgettype": "Text",
+		"options": {"text": "需要登录"}
+	}
+
+try:
+	async with db.sqlorContext(dbname) as sor:
+		# 查询当前downapp信息
+		ns = {
+			"id": params_kw.id,
+			"orgid": orgid
+		}
+		sql = """select * from downapp 
+			where id = ${id}$ and orgid = ${orgid}$"""
+		recs = await sor.sqlExe(sql, ns)
+		if not recs:
+			return {
+				"widgettype": "Text",
+				"options": {"text": "API Key不存在或无权访问"}
+			}
+		
+		r = recs[0]
+		# 返回预填充的表单
+		return {
+			"widgettype": "Form",
+			"options": {
+				"title": "更新API Key",
+				"description": "更新应用信息和API Key配置",
+				"fields": [
+					{
+						"name": "id",
+						"label": "应用ID",
+						"uitype": "str",
+						"value": r.id,
+						"readonly": True
+					},
+					{
+						"name": "appname",
+						"label": "应用名称",
+						"uitype": "str",
+						"value": r.name,
+						"required": True
+					},
+					{
+						"name": "description",
+						"label": "应用描述",
+						"uitype": "text",
+						"value": r.description or ""
+					},
+					{
+						"name": "allowedips",
+						"label": "允许的IP集",
+						"uitype": "str",
+						"value": r.allowedips or "",
+						"placeholder": "多个IP用逗号分隔"
+					},
+					{
+						"name": "regenerate_apikey",
+						"label": "重新生成API Key",
+						"uitype": "checkbox",
+						"description": "勾选后将重新生成API Key，原Key将失效"
+					}
+				]
+			},
+			"binds": [
+				{
+					"wid": "self",
+					"event": "submit",
+					"actiontype": "urlwidget",
+					"target": "self",
+					"options": {
+						"url": "{{entire_url('/dapi/do_update_apikey.dspy')}}"
+					}
+				}
+			]
+		}
+except Exception as e:
+	return {
+		"widgettype": "Text",
+		"options": {"text": f"错误: {e}"}
+	}

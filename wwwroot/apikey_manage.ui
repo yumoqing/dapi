@@ -1,0 +1,103 @@
+{
+    "widgettype": "VBox",
+    "options": {
+        "width": "100%",
+        "height": "100%"
+    },
+    "subwidgets": [
+        {
+            "widgettype": "DataViewer",
+            "options": {
+                "title": "API Key管理",
+                "data_url": "{{entire_url('/dapi/downapps.dspy')}}",
+                "data_field": "apikeys",
+                "pageSize": 20,
+                "fields": [
+                    {"name": "id", "title": "应用ID", "width": "200px"},
+                    {"name": "name", "title": "应用名称", "width": "200px"},
+                    {"name": "apikeyid", "title": "API Key ID", "width": "200px"}
+                ],
+                "toolbar": {
+                    "tools": [
+                        {
+                            "name": "create_apikey",
+                            "label": "创建API Key",
+                            "icon": "{{entire_url('/imgs/newkey.svg')}}"
+                        },
+                        {
+                            "name": "copy_apikey",
+                            "label": "复制API Key",
+                            "selected_row": true,
+                            "icon": "{{entire_url('/imgs/copy.svg')}}"
+                        },
+                        {
+                            "name": "update_apikey",
+                            "label": "更新API Key",
+                            "selected_row": true,
+                            "icon": "{{entire_url('/imgs/edit.svg')}}"
+                        },
+                        {
+                            "name": "delete_apikey",
+                            "label": "删除API Key",
+                            "selected_row": true,
+                            "icon": "{{entire_url('/imgs/delete.svg')}}"
+                        }
+                    ]
+                }
+            },
+            "binds": [
+                {
+                    "wid": "self",
+                    "event": "create_apikey",
+                    "actiontype": "urlwidget",
+                    "target": "PopupWindow",
+                    "popup_options": {
+                        "width": "50%",
+                        "height": "50%",
+                        "archor": "cr"
+                    },
+                    "options": {
+                        "url": "{{entire_url('/dapi/create_apikey.ui')}}"
+                    }
+                },
+                {
+                    "wid": "self",
+                    "event": "copy_apikey",
+                    "actiontype": "urlwidget",
+                    "target": "PopupWindow",
+                    "popup_options": {
+                        "width": "50%",
+                        "height": "50%",
+                        "archor": "cr"
+                    },
+                    "options": {
+                        "url": "{{entire_url('/dapi/copy_apikey.dspy')}}"
+                    }
+                },
+                {
+                    "wid": "self",
+                    "event": "update_apikey",
+                    "actiontype": "urlwidget",
+                    "target": "PopupWindow",
+                    "popup_options": {
+                        "width": "50%",
+                        "height": "50%",
+                        "archor": "cr"
+                    },
+                    "options": {
+                        "url": "{{entire_url('/dapi/update_apikey.dspy')}}"
+                    }
+                },
+                {
+                    "wid": "self",
+                    "event": "delete_apikey",
+                    "actiontype": "urlwidget",
+                    "target": "self",
+                    "options": {
+                        "url": "{{entire_url('/dapi/delete_apikey.dspy')}}"
+                    }
+                }
+            ]
+        }
+    ]
+}

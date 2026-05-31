@@ -1,0 +1,52 @@
+debug(f'{params_kw=}')
+dbname = get_module_dbname('dapi')
+db = DBPools()
+userid = await get_user()
+orgid = await get_userorgid()
+if not userid:
+	return UiError(title='更新API Key', message='需要登录')
+
+try:
+	async with db.sqlorContext(dbname) as sor:
+		# 验证权限
+		ns = {
+			"id": params_kw.id,
+			"orgid": orgid
+		}
+		sql = """select * from downapp 
+			where id = ${id}$ and orgid = ${orgid}$"""
+		recs = await sor.sqlExe(sql, ns)
+		if not recs:
+			return UiError(title='更新API Key', message='API Key不存在或无权访问')
+		
+		# 更新downapp
+		update_ns = {
+			"id": params_kw.id,
+			"name": params_kw.appname,
+			"description": params_kw.description,
+			"allowedips": params_kw.allowedips
+		}
+		await sor.U('downapp', update_ns)
+		
+		# 如果需要重新生成apikey
+		if params_kw.get('regenerate_apikey') == 'true':
+			new_apikey = password_encode(uuid())
+			keys = await sor.R('downapikey', {"dappid": params_kw.id})
+			if keys:
+				key_data = {"id": keys[0].id, "apikey": new_apikey}
+				await sor.U('downapikey', key_data)
+		
+		kw = {
+			"binds": [
+				{
+					"wid": "self",
+					"event": "dismissed",
+					"actiontype": "script",
+					"target": "app.sage_main_content",
+					"script": "this.render()"
+				}
+			]
+		}
+		return UiMessage(title="更新API Key", message="API Key更新成功", **kw)
+except Exception as e:
+	return UiError(title='更新API Key', message=f'更新失败: {e}')
