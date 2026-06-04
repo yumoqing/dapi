@@ -19,7 +19,19 @@ from appPublic.uniqueID import getID
 
 paths = [
     ("/dapi", "logined"),
-    ("/dapi/%", "logined"),
+    ("/dapi/apikey_manage.ui", "logined"),
+    ("/dapi/apply_apikey.dspy", "logined"),
+    ("/dapi/copy_apikey.dspy", "logined"),
+    ("/dapi/create_apikey.dspy", "logined"),
+    ("/dapi/create_apikey.ui", "logined"),
+    ("/dapi/deerer_user.dspy", "logined"),
+    ("/dapi/delete_apikey.dspy", "logined"),
+    ("/dapi/do_update_apikey.dspy", "logined"),
+    ("/dapi/downapps.dspy", "logined"),
+    ("/dapi/get_apikey.dspy", "logined"),
+    ("/dapi/jumpin.dspy", "logined"),
+    ("/dapi/update_apikey.dspy", "logined"),
+    ("/dapi/update_apikey.ui", "logined"),
 ]
 
 
