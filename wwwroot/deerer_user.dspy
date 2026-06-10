@@ -1,7 +1,12 @@
 debug(f'jump-in:{params_kw=}')
 deerer1 = params_kw.deerer
 if deerer1 is None:
-	return "error"
+	return {
+		"status": "error",
+		"data": {
+			"message": "apikey为空"
+		}
+	}
 db = DBPools()
 dbname = get_module_dbname('dapi')
 async with db.sqlorContext(dbname) as sor:

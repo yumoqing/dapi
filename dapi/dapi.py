@@ -177,7 +177,7 @@ async def deerer_user(sor, deer_data, client_ip, request):
 		t, apikey = txt.split(':')
 		return await apikey_user(sor, apikey, client_ip, request)
 	except Exception as e:
-		exception(f'{e}, {deer_data=},{secretkey=}')
+		exception(f'{e}, {deer_data=},{appid=}, {secretkey=}')
 		return None
 			
 def return_error(code):
