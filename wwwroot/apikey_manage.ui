@@ -67,6 +67,7 @@
                     "actiontype": "urlwidget",
                     "target": "PopupWindow",
                     "popup_options": {
+                        "title": "复制API Key",
                         "width": "50%",
                         "height": "50%",
                         "archor": "cr"
@@ -81,6 +82,7 @@
                     "actiontype": "urlwidget",
                     "target": "PopupWindow",
                     "popup_options": {
+                        "title": "更新API Key",
                         "width": "50%",
                         "height": "50%",
                         "archor": "cr"
