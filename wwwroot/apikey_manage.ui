@@ -52,6 +52,7 @@
                     "actiontype": "urlwidget",
                     "target": "PopupWindow",
                     "popup_options": {
+                        "title": "创建API Key",
                         "width": "50%",
                         "height": "50%",
                         "archor": "cr"
