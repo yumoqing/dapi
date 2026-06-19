@@ -1,0 +1,37 @@
+API Key ID: API Key ID
+API Key管理: API Key 관리
+Cancel: 취소
+Conform: 확인
+Discard: 폐기
+Reset: 초기화
+Submit: 제출
+akikey: akikey
+apikey为空: apikey가 비어 있습니다
+error happend: 오류가 발생했습니다
+id: id
+need login: 로그인이 필요합니다
+you need login to do this: 이 작업을 수행하려면 로그인이 필요합니다
+下位应用名: 하위 애플리케이션 이름
+下位系统: 하위 시스템
+下位系统apikey: 하위 시스템 API 키
+下位系统id: 하위 시스템 ID
+允许ip集: 허용 IP 세트
+允许的IP集: 허용 IP 세트
+创建API Key: API Key 생성
+创建日期: 생성 날짜
+创建用户apikey: 사용자 API 키 생성
+删除API Key: API Key 삭제
+加密密钥: 암호화 키
+复制API Key: API Key 복사
+失效日期: 만료 날짜
+应用ID: 애플리케이션 ID
+应用id: 애플리케이션 ID
+应用名: 애플리케이션 이름
+应用名称: 애플리케이션 이름
+应用描述: 애플리케이션 설명
+所属机构: 소속 기관
+描述: 설명
+更新API Key: API Key 업데이트
+没有找到用户apikey: 사용자 API 키를 찾을 수 없습니다
+用户id: 사용자 ID
+重新生成API Key: API Key 재생성

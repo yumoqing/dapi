@@ -1,0 +1,37 @@
+API Key ID: API Key ID
+API Key管理: API Key管理
+Cancel: Cancel
+Conform: Conform
+Discard: Discard
+Reset: Reset
+Submit: Submit
+akikey: akikey
+apikey为空: apikey为空
+error happend: error happend
+id: id
+need login: need login
+you need login to do this: you need login to do this
+下位应用名: 下位应用名
+下位系统: 下位系统
+下位系统apikey: 下位系统apikey
+下位系统id: 下位系统id
+允许ip集: 允许ip集
+允许的IP集: 允许的IP集
+创建API Key: 创建API Key
+创建日期: 创建日期
+创建用户apikey: 创建用户apikey
+删除API Key: 删除API Key
+加密密钥: 加密密钥
+复制API Key: 复制API Key
+失效日期: 失效日期
+应用ID: 应用ID
+应用id: 应用id
+应用名: 应用名
+应用名称: 应用名称
+应用描述: 应用描述
+所属机构: 所属机构
+描述: 描述
+更新API Key: 更新API Key
+没有找到用户apikey: 没有找到用户apikey
+用户id: 用户id
+重新生成API Key: 重新生成API Key
