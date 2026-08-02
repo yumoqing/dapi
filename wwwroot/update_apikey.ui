@@ -30,7 +30,7 @@
 			{
 				"name":"regenerate_apikey",
 				"label":"重新生成API Key",
-				"uitype":"checkbox",
+				"uitype":"check",
 				"description": "勾选后将重新生成API Key，原Key将失效"
 			}
 		]
