@@ -278,11 +278,12 @@ async def create_user_apikey(sor, dappid, user_id, user_orgid, **kwargs):
 		
 		# 创建新apikey
 		apikey_value = getID()
+		_enc = get_serverenv('password_encode')
 		ns = {
 			'id': getID(),
 			'dappid': dappid,
 			'userid': user_id,
-			'apikey': password_encode(apikey_value),
+			'apikey': _enc(apikey_value),
 			'enabled_date': curDateString(),
 			'expired_date': '9999-12-31'
 		}
