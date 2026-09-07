@@ -330,7 +330,7 @@ async def sync_user(request, params_kw, *args, **kw):
 						return return_error(-2)
 				u['orgid'] = o['id']
 				u['roles'] = roles
-				exists = check_duserid_exists(sor, dappid, duserid)
+				exists = await check_duserid_exists(sor, dappid, duserid)
 				if exists:
 					return return_error(-1)
 				userid = await add_user(sor, u)
